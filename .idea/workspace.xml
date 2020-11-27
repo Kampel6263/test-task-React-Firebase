@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f313f017-6ad9-4bcd-9387-77ff2b049911" name="Default Changelist" comment="" />
+    <list default="true" id="f313f017-6ad9-4bcd-9387-77ff2b049911" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/.eslintcache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/src/App.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,7 +25,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Робочий стіл/todo_task-main" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -40,7 +45,7 @@
       <updated>1606379026281</updated>
       <workItem from="1606379028812" duration="836000" />
       <workItem from="1606379933095" duration="287000" />
-      <workItem from="1606380274796" duration="2591000" />
+      <workItem from="1606380274796" duration="27721000" />
     </task>
     <servers />
   </component>
