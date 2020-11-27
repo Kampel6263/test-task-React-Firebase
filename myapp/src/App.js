@@ -16,8 +16,60 @@ export default class App extends Component {
             lastName: '',
             computerVersion: 0,
             mobileVersion: 0,
-            userId: ''
+            userId: '',
+            computerTime: '00:00:00',
+            mobileTime: '00:00:00'
         }
+
+
+    }
+
+
+    returnTime = (time, devise) => {
+
+
+        let seconds
+        let minuts
+        let hours
+
+        if (time < 60) {
+            seconds = time
+            minuts = 0
+            hours = 0
+        } else {
+            minuts = Math.floor(time / 60)
+            seconds = time % 60
+
+            if (minuts > 60) {
+                hours = Math.floor(minuts / 60)
+                minuts = minuts % 60
+
+            } else {
+                hours = 0
+            }
+        }
+
+        const addZero = (number) => {
+            if (number < 10) {
+                number = '0' + number
+                return number
+            } else {
+                return number + ''
+            }
+        }
+
+        hours = addZero(hours)
+        minuts = addZero(minuts)
+        seconds = addZero(seconds)
+
+        time = hours + ':' + minuts + ':' + seconds
+
+        if(devise === 'computer'){
+            this.setState({computerTime: time})
+        } else {
+            this.setState({mobileTime: time})
+        }
+
 
 
     }
@@ -25,41 +77,52 @@ export default class App extends Component {
     componentDidMount = () => {
         firebase.auth().onAuthStateChanged(userAuth => {
             this.setState({loggedIn: !!userAuth});
-            if(!!userAuth){
+            if (!!userAuth) {
                 this.setState({
                     userId: userAuth.uid
                 })
                 firebase.database().ref("/users/" + userAuth.uid).on('value', (elem) => {
-                    this.setState({computerVersion: elem.val().computerVersion, firstName: elem.val().firstName, lastName: elem.val().lastName, mobileVersion: elem.val().mobileVersion})
+                    this.setState({
+                        computerVersion: elem.val().computerVersion,
+                        firstName: elem.val().firstName,
+                        lastName: elem.val().lastName,
+                        mobileVersion: elem.val().mobileVersion
+                    })
                 });
                 this.doIntervalChange()
-            }else {
+                this.returnTime(this.state.mobileVersion, 'mobile')
+                this.returnTime(this.state.computerVersion, 'computer')
+            } else {
                 clearInterval(this.myInterval)
             }
         });
 
     };
 
+
     componentWillUnmount() {
         clearInterval(this.myInterval)
     }
 
-    doIntervalChange = ()=>{
+    doIntervalChange = () => {
 
-        if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
-            this.myInterval  = setInterval(()=>{
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            this.myInterval = setInterval(() => {
                 this.setState(prevState => ({
                     mobileVersion: prevState.mobileVersion + 1
                 }))
+                this.returnTime(this.state.mobileVersion, 'mobile')
+                this.returnTime(this.state.computerVersion, 'computer')
             }, 1000)
-        }else{
-            this.myInterval  = setInterval(()=>{
+        } else {
+            this.myInterval = setInterval(() => {
                 this.setState(prevState => ({
                     computerVersion: prevState.computerVersion + 1
                 }))
+                this.returnTime(this.state.computerVersion, 'computer')
+                this.returnTime(this.state.mobileVersion, 'mobile')
             }, 1000)
         }
-
 
 
     }
@@ -91,7 +154,11 @@ export default class App extends Component {
         firebase.auth().signInWithEmailAndPassword(email, password).then(
             response => {
                 firebase.database().ref("/users/" + response.user.uid).on('value', (elem) => {
-                    this.setState({computerVersion: elem.val().computerVersion, mobileVersion: elem.val().mobileVersion, userId: response.user.uid})
+                    this.setState({
+                        computerVersion: elem.val().computerVersion,
+                        mobileVersion: elem.val().mobileVersion,
+                        userId: response.user.uid
+                    })
                 });
 
             }
@@ -107,21 +174,23 @@ export default class App extends Component {
     }
 
     singOut = () => {
-        const {computerVersion, mobileVersion, firstName, lastName } = this.state
+        const {computerVersion, mobileVersion, firstName, lastName} = this.state
         firebase.auth().signOut().then(
             firebase.database().ref("/users/" + this.state.userId).set(
-                {computerVersion: computerVersion, mobileVersion: mobileVersion, firstName: firstName, lastName: lastName})
+                {
+                    computerVersion: computerVersion,
+                    mobileVersion: mobileVersion,
+                    firstName: firstName,
+                    lastName: lastName
+                })
         )
 
         // console.log(this.state)
     }
 
+
     render() {
         const {loggedIn, hasAccount} = this.state
-
-// console.log(this.state)
-
-
         return (
             <div>
 
@@ -130,9 +199,9 @@ export default class App extends Component {
                     <br/>
                     Hello, {this.state.firstName}
                     <br/>
-                    {this.state.computerVersion}
+                    {this.state.computerTime}
                     <br/>
-                    {this.state.mobileVersion}
+                    {this.state.mobileTime}
 
                 </div> : <div>
                     {hasAccount ? <div className='login'>
