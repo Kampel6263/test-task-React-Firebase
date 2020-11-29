@@ -1,15 +1,18 @@
 import './App.css';
 import React, {Component} from "react";
 import firebase from "firebase";
+import Login from "./component/Login";
+import Register from "./component/Register";
+import User from "./component/user";
+import {Redirect, Route} from 'react-router-dom';
 
 
-export default class App extends Component {
+class App extends Component {
 
     constructor() {
         super();
         this.state = {
             loggedIn: false,
-            hasAccount: true,
             email: '',
             password: '',
             firstName: '',
@@ -21,28 +24,24 @@ export default class App extends Component {
             mobileTime: '00:00:00'
         }
 
-
     }
 
-
     returnTime = (time, devise) => {
-
-
         let seconds
-        let minuts
+        let minutes
         let hours
 
         if (time < 60) {
             seconds = time
-            minuts = 0
+            minutes = 0
             hours = 0
         } else {
-            minuts = Math.floor(time / 60)
+            minutes = Math.floor(time / 60)
             seconds = time % 60
 
-            if (minuts > 60) {
-                hours = Math.floor(minuts / 60)
-                minuts = minuts % 60
+            if (minutes >= 60) {
+                hours = Math.floor(minutes / 60)
+                minutes = minutes % 60
 
             } else {
                 hours = 0
@@ -59,41 +58,63 @@ export default class App extends Component {
         }
 
         hours = addZero(hours)
-        minuts = addZero(minuts)
+        minutes = addZero(minutes)
         seconds = addZero(seconds)
 
-        time = hours + ':' + minuts + ':' + seconds
+        time = hours + ':' + minutes + ':' + seconds
 
-        if(devise === 'computer'){
+        if (devise === 'computer') {
             this.setState({computerTime: time})
         } else {
             this.setState({mobileTime: time})
         }
 
+    }
 
+    setDataToDataBase = (computerVersion, mobileVersion, firstName, lastName, userId) => {
 
+        firebase.database().ref("/users/" + userId).set(
+            {
+                computerVersion: computerVersion,
+                mobileVersion: mobileVersion,
+                firstName: firstName,
+                lastName: lastName
+            })
+    }
+
+    setDataToState = (userId) => {
+        firebase.database().ref("/users/" + userId).on('value', (elem) => {
+
+            if (this.state.computerVersion === 0 && this.state.mobileVersion === 0) {
+                this.setState({
+                    computerVersion: elem.val().computerVersion,
+                    firstName: elem.val().firstName,
+                    lastName: elem.val().lastName,
+                    mobileVersion: elem.val().mobileVersion,
+                    userId: userId
+                })
+            }
+        })
     }
 
     componentDidMount = () => {
+
+
         firebase.auth().onAuthStateChanged(userAuth => {
             this.setState({loggedIn: !!userAuth});
             if (!!userAuth) {
-                this.setState({
-                    userId: userAuth.uid
-                })
-                firebase.database().ref("/users/" + userAuth.uid).on('value', (elem) => {
-                    this.setState({
-                        computerVersion: elem.val().computerVersion,
-                        firstName: elem.val().firstName,
-                        lastName: elem.val().lastName,
-                        mobileVersion: elem.val().mobileVersion
-                    })
-                });
+                this.setDataToState(userAuth.uid)
                 this.doIntervalChange()
                 this.returnTime(this.state.mobileVersion, 'mobile')
                 this.returnTime(this.state.computerVersion, 'computer')
+                return (
+                    <Redirect to={'/user'}/>
+                )
             } else {
                 clearInterval(this.myInterval)
+                return (
+                    <Redirect to={'/login'}/>
+                )
             }
         });
 
@@ -105,25 +126,21 @@ export default class App extends Component {
     }
 
     doIntervalChange = () => {
-
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            this.myInterval = setInterval(() => {
+        this.myInterval = setInterval(() => {
+            this.setDataToState(this.state.userId)
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                 this.setState(prevState => ({
                     mobileVersion: prevState.mobileVersion + 1
                 }))
-                this.returnTime(this.state.mobileVersion, 'mobile')
-                this.returnTime(this.state.computerVersion, 'computer')
-            }, 1000)
-        } else {
-            this.myInterval = setInterval(() => {
+            } else {
                 this.setState(prevState => ({
                     computerVersion: prevState.computerVersion + 1
                 }))
-                this.returnTime(this.state.computerVersion, 'computer')
-                this.returnTime(this.state.mobileVersion, 'mobile')
-            }, 1000)
-        }
-
+            }
+            this.returnTime(this.state.mobileVersion, 'mobile')
+            this.returnTime(this.state.computerVersion, 'computer')
+            this.setDataToDataBase(this.state.computerVersion, this.state.mobileVersion, this.state.firstName, this.state.lastName, this.state.userId)
+        }, 1000)
 
     }
 
@@ -136,14 +153,12 @@ export default class App extends Component {
     }
 
     createAccount = () => {
-
         const {firstName, lastName, email, password} = this.state
         firebase.auth().createUserWithEmailAndPassword(email, password).then(
             response => {
-                firebase.database().ref("/users/" + response.user.uid).set({
-                    firstName: firstName, lastName: lastName, computerVersion: 0, mobileVersion: 0
-                })
-                this.setState({userId: response.user.uid})
+                this.setDataToDataBase(0, 0, firstName, lastName, response.user.uid)
+                this.setState({computerVersion: 0, mobileVersion: 0, userId: response.user.uid})
+
             })
 
     }
@@ -153,81 +168,49 @@ export default class App extends Component {
         const {email, password} = this.state
         firebase.auth().signInWithEmailAndPassword(email, password).then(
             response => {
-                firebase.database().ref("/users/" + response.user.uid).on('value', (elem) => {
-                    this.setState({
-                        computerVersion: elem.val().computerVersion,
-                        mobileVersion: elem.val().mobileVersion,
-                        userId: response.user.uid
-                    })
-                });
+                this.setDataToState(response.user.uid)
 
             }
         )
     }
 
-    registerBlock = () => {
-        this.setState({hasAccount: false})
-    }
-
-    loginBlock = () => {
-        this.setState({hasAccount: true})
-    }
 
     singOut = () => {
         const {computerVersion, mobileVersion, firstName, lastName} = this.state
         firebase.auth().signOut().then(
-            firebase.database().ref("/users/" + this.state.userId).set(
-                {
-                    computerVersion: computerVersion,
-                    mobileVersion: mobileVersion,
-                    firstName: firstName,
-                    lastName: lastName
-                })
+            response => {
+                this.setDataToDataBase(computerVersion, mobileVersion, firstName, lastName, this.state.userId)
+
+            }
         )
 
-        // console.log(this.state)
     }
 
 
     render() {
-        const {loggedIn, hasAccount} = this.state
+
         return (
             <div>
+                <Route path={'/user'} render={() => <User
+                    computerTime={this.state.computerTime}
+                    mobileTime={this.state.mobileTime}
+                    singOut={this.singOut}
+                    loggedIn={this.state.loggedIn}
+                />}
 
-                {loggedIn ? <div>
-                    <button onClick={this.singOut}>Log out</button>
-                    <br/>
-                    Hello, {this.state.firstName}
-                    <br/>
-                    {this.state.computerTime}
-                    <br/>
-                    {this.state.mobileTime}
-
-                </div> : <div>
-                    {hasAccount ? <div className='login'>
-
-                        <h1>Login</h1>
-                        <input type="email" className='input' placeholder={'Email'} id={'email'}
-                               onChange={this.handleChange}/>
-                        <input type="password" placeholder={'Password'} id={'password'} className='input'
-                               onChange={this.handleChange}/>
-                        <input type="submit" className='submit' onClick={this.login}/>
-                        <span onClick={this.registerBlock}>Register</span>
-
-                    </div> : <div className='login'>
-                        <h1>Register</h1>
-                        <input type="name" placeholder={'First name'} id={'firstName'} onChange={this.handleChange}/>
-                        <input type="surname" placeholder={'Last name'} id={'lastName'} onChange={this.handleChange}/>
-                        <input type="email" className='input' placeholder={'Email'} id={'email'}
-                               onChange={this.handleChange}/>
-                        <input type="password" placeholder={'Password'} id={'password'} className='input'
-                               onChange={this.handleChange}/>
-                        <input type="submit" className='submit' onClick={this.createAccount}/>
-                        <span onClick={this.loginBlock}>Log in</span>
-                    </div>}
-                </div>}
+                />
+                <Route path={'/login'} render={() => <Login handleChange={this.handleChange}
+                                                            login={this.login}
+                                                            loggedIn={this.state.loggedIn}
+                />}/>
+                <Route path={'/register'}
+                       render={() => <Register handleChange={this.handleChange}
+                                               createAccount={this.createAccount}
+                                               loggedIn={this.state.loggedIn}/>}/>
+                <Redirect from={'/'} to={'/login'}/>
             </div>
         );
     }
 }
 
+export default App

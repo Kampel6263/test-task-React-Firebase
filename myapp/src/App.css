@@ -1,22 +1,120 @@
+
+*{
+  outline: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1{
+  margin: 25px 0 5px;
+}
+
 .login{
+  width: 25%;
+  height: 50%;
   display: flex;
   flex-direction: column;
-  width: 30%;
-  background: darkgrey;
-  border-radius: 10px;
+  justify-content: space-around;
+  background: #c4c4c4;
+  border-radius: 40px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 40px 0;
+  padding: 3%;
   text-align: center;
 
 }
 
-input{
-  margin: 10px auto;
+
+.input{
+  padding: 5px 10px;
+  background: #c4c4c4;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-size: 22px;
+}
+
+.submit{
+  background: #828282;
+  margin: 0px auto;
+  cursor: pointer;
+  padding: 10px 0px;
+  border-radius: 10px;
+  width: 50%;
+  transition: .1s linear;
+  font-size: 22px;
+}
+
+.submit:hover{
+  background: #777777;
 }
 
 span{
   cursor: pointer;
+}
+
+.footer{
+  font-size: 14px;
+  color: #828282;
+  text-decoration: underline;
+}
+
+.nav_link{
+  margin-left: 3px;
+  color: #000;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+/*content*/
+
+.content{
+  display: flex;
+  position: absolute;
+  width: 70%;
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin: 0 auto;
+  transform: translate(0, -50%);
+  justify-content: space-around;
+}
+
+
+.clock{
+  text-align: center;
+  height: 100%;
+  width: 30%;
+}
+
+
+.clock div{
+  background: #c4c4c4;
+  padding: 20% 25%;
+  border-radius: 20px;
+  margin: 10px 0;
+}
+
+.clock div img{
+  width: 100%;
+}
+
+.clock span{
+  font-size: 30px;
+}
+
+h2{
+  font-weight: 400;
+  font-size: 30px;
+}
+
+.logOut{
+  position: absolute;
+  top:48px;
+  right: 45px;
+  background: none;
+  font-weight: bold;
 }
