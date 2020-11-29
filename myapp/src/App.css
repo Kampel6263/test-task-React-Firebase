@@ -120,3 +120,37 @@ h2{
 .time{
   cursor: default;
 }
+
+@media (max-width: 1000px) {
+  .content{
+    width: 90%;
+  }
+  .login{
+    width: 40%;
+    height: 65%;
+  }
+
+}
+
+@media (max-width: 500px) {
+  .content{
+    flex-direction: column;
+  }
+
+  .clock{
+    width: 60%;
+    margin: 10px auto;
+  }
+  .clock div{
+    padding: 15% 20%;
+  }
+  .logOut{
+    font-size: 19px;
+    top: 20px;
+    right: 20px;
+  }
+
+  .login{
+    width: 75%;
+  }
+}

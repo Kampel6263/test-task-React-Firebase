@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c54f6e25-609b-4a74-9f92-7762c902a747" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.eslintcache" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintcache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Register.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/user.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/user.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +59,7 @@
       <option name="presentableId" value="Default" />
       <updated>1606568899386</updated>
       <workItem from="1606568902371" duration="6501000" />
-      <workItem from="1606644057455" duration="24170000" />
+      <workItem from="1606644057455" duration="25124000" />
     </task>
     <servers />
   </component>
