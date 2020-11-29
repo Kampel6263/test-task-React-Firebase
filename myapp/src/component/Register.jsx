@@ -23,7 +23,7 @@ const Register = ({handleChange, createAccount, loggedIn}) => {
             <div>
                 <button className='submit' onClick={createAccount}>Sing up</button>
                 <div className={'footer'}>
-                    <text>Already registered?</text>
+                    <span>Already registered?</span>
                     <NavLink to={'/login'} className={'nav_link'}>Log in</NavLink>
                 </div>
             </div>

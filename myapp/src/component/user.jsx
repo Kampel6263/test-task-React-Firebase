@@ -17,12 +17,12 @@ const User = ({computerTime, mobileTime, singOut, loggedIn}) => {
                 <div className="clock">
                     <h2>Desktop</h2>
                     <div><img src={clocks} alt="Clock"/></div>
-                    <span>{computerTime}</span>
+                    <span className={'time'}>{computerTime}</span>
                 </div>
                 <div className="clock">
                     <h2>Mobile</h2>
                     <div><img src={clocks} alt="Clock"/></div>
-                    <span>{mobileTime}</span>
+                    <span className={'time'}>{mobileTime}</span>
                 </div>
             </div>
         </div>

@@ -52,9 +52,6 @@ h1{
   background: #777777;
 }
 
-span{
-  cursor: pointer;
-}
 
 .footer{
   font-size: 14px;
@@ -117,4 +114,9 @@ h2{
   right: 45px;
   background: none;
   font-weight: bold;
+  cursor: pointer;
+}
+
+.time{
+  cursor: default;
 }

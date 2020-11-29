@@ -169,6 +169,7 @@ class App extends Component {
         firebase.auth().signInWithEmailAndPassword(email, password).then(
             response => {
                 this.setDataToState(response.user.uid)
+                this.setState({computerVersion: 0, mobileVersion: 0, userId: response.user.uid})
 
             }
         )

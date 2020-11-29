@@ -18,7 +18,7 @@ const Login = ({handleChange,login, loggedIn}) => {
             <div>
                 <button className="submit" onClick={login}>Login</button>
                 <div className={'footer'}>
-                    <text>Don’t have an account yet?</text>
+                    <span>Don’t have an account yet?</span>
                     <NavLink to={'/register'} className={'nav_link'}>Register</NavLink>
                 </div>
             </div>
