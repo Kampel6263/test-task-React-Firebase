@@ -85,15 +85,38 @@ class App extends Component {
     setDataToState = (userId) => {
         firebase.database().ref("/users/" + userId).on('value', (elem) => {
 
-            if (this.state.computerVersion === 0 && this.state.mobileVersion === 0) {
+            // if (this.state.computerVersion === 0 && this.state.mobileVersion === 0) {
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+                if (this.state.computerVersion === 0) {
+                    this.setState({
+                        mobileVersion: elem.val().mobileVersion
+                    })
+                }
                 this.setState({
                     computerVersion: elem.val().computerVersion,
-                    firstName: elem.val().firstName,
-                    lastName: elem.val().lastName,
+
+                })
+
+
+            } else {
+                if (this.state.computerVersion === 0) {
+                    this.setState({
+                        computerVersion: elem.val().computerVersion
+                    })
+                }
+                this.setState({
                     mobileVersion: elem.val().mobileVersion,
-                    userId: userId
+
                 })
             }
+            this.setState({
+                firstName: elem.val().firstName,
+                lastName: elem.val().lastName,
+                userId: userId
+            })
+
+            // }
         })
     }
 
