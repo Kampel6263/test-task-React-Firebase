@@ -130,14 +130,10 @@ class App extends Component {
                 this.doIntervalChange()
                 this.returnTime(this.state.mobileVersion, 'mobile')
                 this.returnTime(this.state.computerVersion, 'computer')
-                return (
-                    <Redirect to={'/user'}/>
-                )
+
             } else {
                 clearInterval(this.myInterval)
-                return (
-                    <Redirect to={'/login'}/>
-                )
+
             }
         });
 
